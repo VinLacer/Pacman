@@ -1,8 +1,7 @@
 import utils
 import pygame
 import Constantes
-import os
-import sys
+import sprites
 
 class Game:
     
@@ -68,28 +67,34 @@ class Game:
         
         pygame.display.flip()
         self.esperar_jogador()
+    
+    def carrega_mapa(self):
+        self.screen.fill('black')
+        player = pygame.sprite.GroupSingle(sprites.Player())
+        mapa = pygame.sprite.GroupSingle(sprites.parede())
+        
+        player.update()
+        mapa.draw(self.screen)
+        player.draw(self.screen)
+               
+
+        #if pygame.sprite.spritecollide(player.sprite,mapa,False,pygame.sprite.collide_mask):
+            #print('colisao')
+        #else:
+            #print('nao')
+
+        pygame.display.update()
+
 
     def Jogo(self):
         self.rodando = utils.rodando()
         self.relogio.tick(Constantes.FPS)
-        self.screen.fill('black')
-
-        txt_trabalhando_surf = utils.escrever_txt('AINDA TRABALHANDO',
-        Constantes.FONTE_GAME,
-        30,
-        'green')
-
-        txt_trabalhando_rect = pygame.Surface.get_rect(txt_trabalhando_surf)
-        txt_trabalhando_rect.midtop = (Constantes.LARGURA/2, Constantes.ALTURA/2)
-        
-        self.screen.blit(txt_trabalhando_surf,txt_trabalhando_rect)
-        
-        pygame.display.flip()
         
 
 g = Game()
-g.tela_ini()
+#g.tela_ini()
 
 while g.rodando:
     g.Jogo()
+    g.carrega_mapa()
                 

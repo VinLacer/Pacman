@@ -4,7 +4,7 @@ import os
 
 def carregar_img(img):
         img_path = os.path.join(os.getcwd(),img)
-        img = pygame.image.load(img_path).convert()
+        img = pygame.image.load(img_path)
         return img
 
 def carregar_sons(som):

@@ -14,7 +14,7 @@ PRETO = (0,0,0)
 #CAMINHO DAS IMAGENS
 LOGO = 'imagens/LOGO.png'
 PACMAN_IMG = 'imagens/Pacman.png'
-FODA = 'imagens/foda.png'
+MAPA = 'imagens/TESTE1.png'
 
 #CAMINHO DOS SONS
 SOM_TELA_INIT = 'sons/som_tela_init.mp3'
