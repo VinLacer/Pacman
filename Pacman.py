@@ -2,6 +2,7 @@ import utils
 import pygame
 import Constantes
 import sprites
+import sys
 
 class Game:
     
@@ -12,13 +13,8 @@ class Game:
         pygame.display.set_caption(Constantes.NOME_JOGO)                                                           
         self.relogio = pygame.time.Clock()
         self.rodando = True
-
-    def sair_jogo(self):
-        for event in pygame.event.get():
-            if event.type == pygame.QUIT:
-                if self.rodando:
-                    self.rodando = False
-
+        self.jogando = False
+            
     def esperar_jogador(self):
         self.relogio.tick(Constantes.FPS)
         esperando = True
@@ -28,11 +24,11 @@ class Game:
                     utils.carregar_sons(Constantes.SOM_TELA_INIT)
                     pygame.mixer.music.play()
                     esperando = False
+                    self.jogando = True
                 if event.type == pygame.QUIT:
                     esperando = False
                     self.rodando = False
         
-
     def tela_ini(self):
         utils.carregar_sons(Constantes.MUSICA_TELA_INIT)
         pygame.mixer.music.play()
@@ -68,33 +64,50 @@ class Game:
         pygame.display.flip()
         self.esperar_jogador()
     
-    def carrega_mapa(self):
+    def sair_jogo(self):
+        for event in pygame.event.get():
+            if event.type == pygame.QUIT:
+                pygame.quit()
+                sys.exit()
+
+    def novo_Jogo(self):
         self.screen.fill('black')
-        player = pygame.sprite.GroupSingle(sprites.Player())
-        mapa = pygame.sprite.GroupSingle(sprites.parede())
-        
-        player.update()
-        mapa.draw(self.screen)
-        player.draw(self.screen)
-               
-
-        #if pygame.sprite.spritecollide(player.sprite,mapa,False,pygame.sprite.collide_mask):
-            #print('colisao')
-        #else:
-            #print('nao')
-
-        pygame.display.update()
-
-
-    def Jogo(self):
-        self.rodando = utils.rodando()
+        player_group.draw(self.screen)
+        mapa_group.draw(self.screen)
+        pygame.display.flip()
+        player_group.update()
+        self.eventos()
         self.relogio.tick(Constantes.FPS)
-        
+
+    def eventos(self):
+        if pygame.sprite.collide_mask(player,mapa):
+            player.caminhando = False
+            if pygame.key.get_pressed()[pygame.K_w]:
+                player.pos_y += 2
+            if pygame.key.get_pressed()[pygame.K_s]:
+                player.pos_y -= 2
+            if pygame.key.get_pressed()[pygame.K_d]:
+                player.pos_x -= 2
+            if pygame.key.get_pressed()[pygame.K_a]:
+                player.pos_x += 2
+        player.caminhando = True
+
+             
 
 g = Game()
-#g.tela_ini()
+g.tela_ini()
+player = sprites.Player()
+mapa = sprites.mapa()
+player_group = pygame.sprite.Group()
+mapa_group = pygame.sprite.Group()
+player_group.add(player)
+mapa_group.add(mapa)
+
 
 while g.rodando:
-    g.Jogo()
-    g.carrega_mapa()
+    g.sair_jogo()
+    g.novo_Jogo()
+    
+    
+    
                 
