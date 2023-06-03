@@ -74,6 +74,7 @@ class Game:
         self.screen.fill('black')
         player_group.draw(self.screen)
         mapa_group.draw(self.screen)
+
         pygame.display.flip()
         player_group.update()
         self.eventos()
@@ -81,25 +82,28 @@ class Game:
 
     def eventos(self):
         if pygame.sprite.collide_mask(player,mapa):
+            print('colisao')
+            player.vel = 0
             player.caminhando = False
-            if pygame.key.get_pressed()[pygame.K_w]:
-                player.pos_y += 2
-            if pygame.key.get_pressed()[pygame.K_s]:
-                player.pos_y -= 2
-            if pygame.key.get_pressed()[pygame.K_d]:
-                player.pos_x -= 2
-            if pygame.key.get_pressed()[pygame.K_a]:
-                player.pos_x += 2
-        player.caminhando = True
+            player.block_dire = player.direção
+            player.voltar()
+        else:
+            player.block_dire = ''
+        player.vel = 2
 
-             
-
+        if player.mask.overlap(mapa.mask,(0,0)):
+            print('overlap')
+    
+            
 g = Game()
 g.tela_ini()
+
 player = sprites.Player()
 mapa = sprites.mapa()
+
 player_group = pygame.sprite.Group()
 mapa_group = pygame.sprite.Group()
+
 player_group.add(player)
 mapa_group.add(mapa)
 
